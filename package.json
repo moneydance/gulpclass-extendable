@@ -1,0 +1,40 @@
+{
+  "name": "gulpclass",
+  "version": "0.1.2",
+  "private": true,
+  "description": "Make a beautiful class-based gulpfiles with Typescript and Gulpfile.ts",
+  "license": "Apache-2.0",
+  "readmeFilename": "README.md",
+  "author": {
+    "name": "Umed Khudoiberdiev",
+    "email": "pleerock.me@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pleerock/gulpclass.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pleerock/gulpclass/issues"
+  },
+  "tags": [
+    "typescript-gulp",
+    "typescript-gulpfile",
+    "gulpclass",
+    "gulp"
+  ],
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "merge2": "^0.3.6",
+    "run-sequence": "^1.1.5"
+  },
+  "devDependencies": {
+    "del": "^2.0.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-shell": "^0.5.0",
+    "typescript": "^1.7.5",
+    "typings": "^0.6.3"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/typings install && ./node_modules/.bin/tsc"
+  }
+}
