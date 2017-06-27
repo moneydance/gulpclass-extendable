@@ -11,7 +11,6 @@ export class MetadataStorage {
     private taskMetadatas: TaskMetadata[] = [];
 
     registerTasks(gulpClassInstance: any) {
-        console.log(gulpClassInstance);
         const classHierarchy = this.getClassHierarchy(gulpClassInstance.constructor);
         let associatedTaskMetadatas:TaskMetadata[] = [];
         console.log(associatedTaskMetadatas);
