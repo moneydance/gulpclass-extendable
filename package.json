@@ -1,20 +1,17 @@
 {
-  "name": "gulpclass",
-  "version": "0.1.2",
-  "private": true,
-  "description": "Make a beautiful class-based gulpfiles with Typescript and Gulpfile.ts",
-  "license": "Apache-2.0",
-  "readmeFilename": "README.md",
+  "name": "gulpclass-extendable",
+  "version": "0.0.1",
+  "description": "Make a beautiful hierarchal class-based gulpfiles with Typescript and Gulpfile.ts",
   "author": {
-    "name": "Umed Khudoiberdiev",
-    "email": "pleerock.me@gmail.com"
+    "name": "Ben Pusey",
+    "email": "bpusey@buedu"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pleerock/gulpclass.git"
+    "url": "https://github.com/moneydance/gulpclass-extendable"
   },
   "bugs": {
-    "url": "https://github.com/pleerock/gulpclass/issues"
+    "url": "https://github.com/moneydance/gulpclass-extendable/issues"
   },
   "tags": [
     "typescript-gulp",
@@ -23,18 +20,23 @@
     "gulp"
   ],
   "dependencies": {
-    "gulp": "^3.9.0",
-    "merge2": "^0.3.6",
-    "run-sequence": "^1.1.5"
+    "gulp": "3.9.1",
+    "@types/gulp": "4.0.4",
+    "merge2": "1.0.3",
+    "@types/merge2": "0.3.30",
+    "run-sequence": "1.2.2",
+    "@types/run-sequence": "0.0.29",
+    "@types/q": "1.0.1",
+    "@types/node": "8.0.3",
+    "@types/orchestrator": "0.3.0"
   },
   "devDependencies": {
-    "del": "^2.0.2",
-    "gulp-replace": "^0.5.4",
-    "gulp-shell": "^0.5.0",
-    "typescript": "^1.7.5",
-    "typings": "^0.6.3"
+    "del": "3.0.0",
+    "gulp-replace": "0.6.1",
+    "gulp-shell": "0.6.3",
+    "typescript": "2.3.4"
   },
   "scripts": {
-    "start": "./node_modules/.bin/typings install && ./node_modules/.bin/tsc"
+    "start": "tsc"
   }
 }

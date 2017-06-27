@@ -1,5 +1,4 @@
 import {TaskMetadata} from "./TaskMetadata";
-import {GulpclassMetadata} from "./GulpclassMetadata";
 import * as merge from "merge2";
 import * as gulp from "gulp";
 import * as runSequence from "run-sequence";
@@ -9,22 +8,16 @@ import * as runSequence from "run-sequence";
  */
 export class MetadataStorage {
 
-    // -------------------------------------------------------------------------
-    // Properties
-    // -------------------------------------------------------------------------
-
     private taskMetadatas: TaskMetadata[] = [];
 
-    // -------------------------------------------------------------------------
-    // Public Methods
-    // -------------------------------------------------------------------------
-
     registerTasks(gulpClassInstance: any) {
+        console.log(gulpClassInstance);
         const classHierarchy = this.getClassHierarchy(gulpClassInstance.constructor);
         let associatedTaskMetadatas:TaskMetadata[] = [];
+        console.log(associatedTaskMetadatas);
         // find top level class tasks first. Dont register task with name already associated, that task has been overridden.
         for (let classConstructor of classHierarchy) {
-            associatedTaskMetadatas = associatedTaskMetadata.concat(
+            associatedTaskMetadatas = associatedTaskMetadatas.concat(
               (this.taskMetadatas.filter(taskMetadata =>
                 (taskMetadata.classConstructor === classConstructor) &&
                 !(associatedTaskMetadatas.some(associatedTaskMetadata =>
@@ -39,11 +32,6 @@ export class MetadataStorage {
     addTaskMetadata(metadata: TaskMetadata) {
         this.taskMetadatas.push(metadata);
     }
-
-    // -------------------------------------------------------------------------
-    // Private Methods
-    // -------------------------------------------------------------------------
-
 
     private getClassHierarchy(baseClass:Function): Function[] {
       let constructors:Function[] = [];
@@ -82,7 +70,4 @@ export class MetadataStorage {
     }
 }
 
-/**
- * Default metadata storage is used as singleton and can be used to storage all metadatas.
- */
 export let defaultMetadataStorage = new MetadataStorage();

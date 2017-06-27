@@ -1,13 +1,12 @@
 import {Gulpclass, Task, SequenceTask} from "./src/index";
+import * as gulp from "gulp";
+import * as del from "del";
+import * as shell from "gulp-shell";
+import * as replace from "gulp-replace";
 
-const gulp = require("gulp");
-const del = require("del");
-const shell = require("gulp-shell");
-const replace = require("gulp-replace");
-
-@Gulpclass()
+@Gulpclass
 export class Gulpfile {
-
+    constructor() {}
     /**
      * Cleans compiled files.
      */
@@ -106,3 +105,5 @@ export class Gulpfile {
     }
 
 }
+
+new Gulpfile();
