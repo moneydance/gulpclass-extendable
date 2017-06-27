@@ -1,6 +1,7 @@
 import {TaskMetadata} from "./TaskMetadata";
 import {GulpclassMetadata} from "./GulpclassMetadata";
 import * as merge from "merge2";
+import * as gulp from "gulp";
 import * as runSequence from "run-sequence";
 
 /**
@@ -18,10 +19,21 @@ export class MetadataStorage {
     // Public Methods
     // -------------------------------------------------------------------------
 
-    registerTasks(gulpClass: any) {
-        this.taskMetadatas
-            .filter(taskMetadata => taskMetadata.classConstructor === metadata.classConstructor)
-            .forEach(taskMetadata => this.registerTasks(metadata, taskMetadata));
+    registerTasks(gulpClassInstance: any) {
+        const classHierarchy = this.getClassHierarchy(gulpClassInstance.constructor);
+        let associatedTaskMetadatas:TaskMetadata[] = [];
+        // find top level class tasks first. Dont register task with name already associated, that task has been overridden.
+        for (let classConstructor of classHierarchy) {
+            associatedTaskMetadatas = associatedTaskMetadata.concat(
+              (this.taskMetadatas.filter(taskMetadata =>
+                (taskMetadata.classConstructor === classConstructor) &&
+                !(associatedTaskMetadatas.some(associatedTaskMetadata =>
+                  taskMetadata.name === associatedTaskMetadata.name
+                ))
+              ))
+            );
+        }
+        associatedTaskMetadatas.forEach(associatedTaskMetadata => this.registerTask(gulpClassInstance, associatedTaskMetadata));
     }
 
     addTaskMetadata(metadata: TaskMetadata) {
@@ -43,28 +55,24 @@ export class MetadataStorage {
       return constructors;
     }
 
-    private registerTasks(gulpclassMetadata: GulpclassMetadata, taskMetadata: TaskMetadata) {
-        if (!gulpclassMetadata.classInstance)
-            gulpclassMetadata.classInstance = new (<any>gulpclassMetadata.classConstructor)();
-
+    private registerTask(gulpClassInstance: any, taskMetadata: TaskMetadata) {
         if (taskMetadata.dependencies && taskMetadata.dependencies.length) {
-            gulpclassMetadata.gulpInstance.task(taskMetadata.name, taskMetadata.dependencies, (cb: Function) => {
-                return this.executeTask(gulpclassMetadata, taskMetadata, cb);
+            gulp.task(taskMetadata.name, taskMetadata.dependencies, (cb: Function) => {
+                return this.executeTask(gulpClassInstance, taskMetadata, cb);
             });
         } else {
-            gulpclassMetadata.gulpInstance.task(taskMetadata.name, (cb: Function) => {
-                return this.executeTask(gulpclassMetadata, taskMetadata, cb);
+            gulp.task(taskMetadata.name, (cb: Function) => {
+                return this.executeTask(gulpClassInstance, taskMetadata, cb);
             });
         }
     }
 
-    private executeTask(gulpclassMetadata: GulpclassMetadata, taskMetadata: TaskMetadata, cb: Function) {
-        const methodResult = (<any>gulpclassMetadata.classInstance)[taskMetadata.method](cb);
+    private executeTask(gulpClassInstance: any, taskMetadata: TaskMetadata, cb: Function) {
+        const methodResult = (gulpClassInstance)[taskMetadata.method](cb);
         if (taskMetadata.isSequence && methodResult instanceof Array) {
             if (typeof methodResult[methodResult.length - 1] !== "function") {
                 methodResult.push(cb);
             }
-
             return runSequence.apply(this, methodResult);
         } else if (taskMetadata.isMerge && methodResult instanceof Array) {
             return merge.apply(this, methodResult);
@@ -72,7 +80,6 @@ export class MetadataStorage {
             return methodResult;
         }
     }
-
 }
 
 /**
