@@ -1,6 +1,6 @@
-# Make a beautiful class-based gulpfiles with Typescript and Gulpclass
+# Make a beautiful class-based extendable and configurable gulpfiles with Typescript and Gulpclass
 
-Allows to create a gulp files in classes, each method of which can be a gulp task.
+Allows to create a gulp files in classes, these class can be extended. Each method of which can be a gulp task.
 
 ## Installation
 
@@ -21,7 +21,7 @@ Allows to create a gulp files in classes, each method of which can be a gulp tas
     import * as gulp from "gulp";
     import * as del from "del";
 
-    @Gulpclass()
+    @Gulpclass
     export class Gulpfile {
     
         @Task() // return promise to indicate your task completion
@@ -58,8 +58,9 @@ Allows to create a gulp files in classes, each method of which can be a gulp tas
         defaultTask() {
             // using "defaultTask", because "default" is a reserved keyword in ES2015
         }
-    
     }
+
+    new Gulpfile();
     ```
     
 2. How to run
@@ -80,71 +81,10 @@ Allows to create a gulp files in classes, each method of which can be a gulp tas
     eval(require("typescript").transpile(require("fs").readFileSync("./gulpfile.ts").toString()));
     ```
     This piece of code reads your gulpfile.ts contents, and asks typescript to transpile it on-the-fly and executes transpiled result as javascript.
-    
+
     (you need to run `npm install typescript --save-dev` if you dont have typescript package installed)
-    
+
     Please note that if you are NOT using `outDir` in typescript compile options, you may have problems if your 
     gulpclass file is named `gulpfile.ts` typescript compiler will try to compile it to `gulpfile.js`, and will override
     code you added to gulpfile.js. Solution is simple - rename your `gulpfile.ts`. You can call it as you wish, 
-    for example you can call it `gulpclass.ts`.
-    
-    ## Alternative approaches
-
-    Alternative approaches depend on which tsconfig configuration you use. These examples assume that you are using 
-    `"outDir": "build"` as a directory to where files are compiled:
-
-    * create `gulpfile.js` and put there ```require("build/gulpfile")```
-    * or run gulp in cmd with extra parameters: `gulp --gulpfile build/gulpfile.js --cwd .`
-    
-    Benefits of this apporach is that you can use debug your gulp classes in IDEs.
-
-## FAQ
-
-* How to load tasks from multiple files?
-
-Edit your `gulpfile.js` and change it following way:
-
-```javascript
-const files = [
-    "./othertask.ts",
-    "./gulpfile.ts"
-];
-files.forEach(function(file) { eval(require("typescript").transpile(require("fs").readFileSync(file).toString())) });
-```
-
-* How to use task dependencies?
-
-Simple use second argument of the `@Task` decorator:
-
-```typescript
-@Task("someTask", ["clean", "compile"])
-someTask() {
-    return doSomething();
-}
-```
-
-* Why my task `gulp.task("default", ["clean", "compile", "build"])` is not working?
-
-I have such a task and its not working:
-
-```typescript
-@Task("default")
-default() {
-    return ["clean", "compile", "build"];
-}
-```
-
-Why? Because the array you are returning is what task is doing, not a task
-dependencies as you wish:
-
-```typescript
-@Task("default", ["clean", "compile", "build"])
-default() {
-}
-```
-
-
-## Samples
-
-This project itself using [gulpfile.ts](https://github.com/pleerock/gulpclass/blob/master/gulpfile.ts).
-Take a look on it as an example.
+    for example you can call it `gulpclass.ts`. 

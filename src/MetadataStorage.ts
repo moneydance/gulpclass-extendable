@@ -13,7 +13,6 @@ export class MetadataStorage {
     registerTasks(gulpClassInstance: any) {
         const classHierarchy = this.getClassHierarchy(gulpClassInstance.constructor);
         let associatedTaskMetadatas:TaskMetadata[] = [];
-        console.log(associatedTaskMetadatas);
         // find top level class tasks first. Dont register task with name already associated, that task has been overridden.
         for (let classConstructor of classHierarchy) {
             associatedTaskMetadatas = associatedTaskMetadatas.concat(
