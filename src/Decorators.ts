@@ -7,9 +7,11 @@ import { defaultMetadataStorage } from "./MetadataStorage";
 export function Gulpclass(target:any) {
   let original:any = target;
   var f : any = function (...args:any[]) {
+    let caller = new.target;
     let instance:any = new (Function.prototype.bind.apply(original, args));
-    console.log(args);
-    defaultMetadataStorage.registerTasks(instance);
+    if (caller === original) {
+      defaultMetadataStorage.registerTasks(instance);
+    }
     return instance;
   }
   f.prototype = original.prototype;

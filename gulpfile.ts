@@ -106,11 +106,11 @@ export class Gulpfile {
 
 }
 
+@Gulpclass
 class GulpfileB extends Gulpfile {
-  constructor(private x:number){
+  constructor(){
     super();
-    console.log(this.x);
   }
 }
 
-new GulpfileB(1);
+new GulpfileB();

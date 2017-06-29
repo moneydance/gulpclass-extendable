@@ -1,6 +1,6 @@
 {
   "name": "gulpclass-extendable",
-  "version": "0.0.2",
+  "version": "0.0.7",
   "description": "Make a beautiful hierarchal class-based gulpfiles with Typescript and Gulpfile.ts",
   "author": {
     "name": "Ben Pusey",
