@@ -1,20 +1,20 @@
 import { defaultMetadataStorage } from "./MetadataStorage";
+import { construct } from "./utils";
 
 /**
  * Registers a class from which tasks will be loaded.
  * You can optionally specify your gulp instance if you want to register tasks specifically there.
  */
 export function Gulpclass(target:any) {
-  let original:any = target;
-  var f : any = function (...args:any[]) {
-    let caller = new.target;
-    let instance:any = new (Function.prototype.bind.apply(original, args));
-    if (caller === original) {
+  var f:any = function(...args:any[]) {
+    let instance = construct(target, args);
+    Object.setPrototypeOf(instance, target.prototype);
+    if (new.target === target) {
       defaultMetadataStorage.registerTasks(instance);
     }
     return instance;
   }
-  f.prototype = original.prototype;
+  f.prototype = target.prototype;
   return f;
 }
 

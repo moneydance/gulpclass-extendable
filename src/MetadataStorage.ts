@@ -2,7 +2,7 @@ import {TaskMetadata} from "./TaskMetadata";
 import * as merge from "merge2";
 import * as gulp from "gulp";
 import * as runSequence from "run-sequence";
-
+import { getClassHierarchy } from "./utils";
 /**
  * Storages and registers all gulp classes and their tasks.
  */
@@ -11,7 +11,9 @@ export class MetadataStorage {
     private taskMetadatas: TaskMetadata[] = [];
 
     registerTasks(gulpClassInstance: any) {
-        const classHierarchy = this.getClassHierarchy(gulpClassInstance.constructor);
+        const gulpClassPrototype = Object.getPrototypeOf(gulpClassInstance);
+        const classHierarchy = getClassHierarchy(gulpClassPrototype);
+        console.log(classHierarchy);
         let associatedTaskMetadatas:TaskMetadata[] = [];
         // find top level class tasks first. Dont register task with name already associated, that task has been overridden.
         for (let classConstructor of classHierarchy) {
@@ -29,16 +31,6 @@ export class MetadataStorage {
 
     addTaskMetadata(metadata: TaskMetadata) {
         this.taskMetadatas.push(metadata);
-    }
-
-    private getClassHierarchy(baseClass:Function): Function[] {
-      let constructors:Function[] = [];
-      let currentConstructor:Function = baseClass;
-      while (currentConstructor != Function.prototype) {
-        constructors.push(currentConstructor);
-        currentConstructor = Object.getPrototypeOf(currentConstructor);
-      }
-      return constructors;
     }
 
     private registerTask(gulpClassInstance: any, taskMetadata: TaskMetadata) {
